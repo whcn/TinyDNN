@@ -6,12 +6,13 @@ int Variable::GetData() const {
     return data_;
 }
 
-Variable Function::operator()(Variable &lhs, Variable &rhs) {
-    return forward(lhs, rhs);
+Variable Function::operator()(std::vector<Variable> &args) {
+    return forward(args);
 }
 
-Variable Add::forward(Variable &lhs, Variable &rhs) {
-    return Variable(lhs.GetData() + rhs.GetData());
+Variable Add::forward(std::vector<Variable> &args) {
+    assert(args.size() == 2);
+    return Variable(args[0].GetData() + args[1].GetData());
 }
 
 Variable Add::backward() {

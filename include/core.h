@@ -14,16 +14,16 @@ private:
 
 class Function {
 public:
-    Variable operator()(Variable &lhs, Variable &rhs);
+    Variable operator()(std::vector<Variable> &args);
 
-    virtual Variable forward(Variable &lhs, Variable &rhs) = 0;
+    virtual Variable forward(std::vector<Variable> &args) = 0;
 
     virtual Variable backward() = 0;
 };
 
 class Add : public Function {
 public:
-    Variable forward(Variable &lhs, Variable &rhs) override;
+    Variable forward(std::vector<Variable> &args) override;
 
     Variable backward() override;
 };
