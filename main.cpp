@@ -1,11 +1,6 @@
-#include <iostream>
+#include "gtest/gtest.h"
 
-#include "core.h"
-
-int main() {
-    Variable a(1);
-    Variable b(2);
-    auto c = Add()(a, b);
-    std::cout << c.GetData() << std::endl;
-    return 0;
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
