@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 class Function;
 
 class Variable {
@@ -20,7 +22,7 @@ public:
 
     void Backward();
 
-    Variable operator+(Variable &variable) const;
+    Variable &operator+(Variable &rhs) const;
 
 private:
     int data_;
@@ -30,23 +32,23 @@ private:
 
 class Function {
 public:
-    Variable operator()(std::vector<Variable *> &args);
+    Variable *operator()(vector<Variable *> &args);
 
-    virtual Variable Forward(std::vector<Variable *> args) = 0;
+    virtual Variable *Forward(vector<Variable *> args) = 0;
 
-    virtual std::vector<float> Backward(float &grad) = 0;
+    virtual vector<float> Backward(float &grad) = 0;
 
-    void UpdateInputGrads(std::vector<float> &grads);
+    void UpdateInputGrads(vector<float> &grads);
 
-    std::vector<Variable *> GetInputs();
+    vector<Variable *> GetInputs();
 
 protected:
-    std::vector<Variable *> inputs_;
+    vector<Variable *> inputs_;
 };
 
 class Add : public Function {
 public:
-    Variable Forward(std::vector<Variable *> args) override;
+    Variable *Forward(vector<Variable *> args) override;
 
-    std::vector<float> Backward(float &grad) override;
+    vector<float> Backward(float &grad) override;
 };
