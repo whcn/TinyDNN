@@ -28,7 +28,7 @@ void Variable::Backward() {
         auto creator = funcs.front();
         assert(creator != nullptr);
         auto grads = creator->Backward(grad_);
-        creator->SetGrads(grads);
+        creator->UpdateInputGrads(grads);
         funcs.pop();
         for (auto &input: creator->GetInputs()) {
             auto input_creator = input->GetCreator();
@@ -39,29 +39,37 @@ void Variable::Backward() {
     }
 }
 
-void Variable::SetGrad(float grad) {
-    grad_ = grad;
+void Variable::UpdateGrad(float grad) {
+    grad_ += grad;
+}
+
+Variable Variable::operator+(Variable &variable) const {
+    return Variable(data_ + variable.GetData());
 }
 
 Variable Function::operator()(std::vector<Variable *> &args) {
-    return Forward(args);
-}
-
-Variable Add::Forward(std::vector<Variable *> args) {
-    assert(args.size() == 2);
+    auto output = Forward(args);
     inputs_ = args;
-    auto output = Variable(args[0]->GetData() + args[1]->GetData());
     output.SetCreator(this);
     return output;
 }
 
-std::vector<float> Add::Backward(float &grad) {
-    return {grad * 1, grad * 1};
-}
-
-void Add::SetGrads(std::vector<float> &grads) {
+void Function::UpdateInputGrads(std::vector<float> &grads) {
     assert(grads.size() == inputs_.size());
     for (int i = 0; i < grads.size(); ++i) {
-        inputs_[i]->SetGrad(grads[i]);
+        inputs_[i]->UpdateGrad(grads[i]);
     }
+}
+
+std::vector<Variable *> Function::GetInputs() {
+    return inputs_;;
+}
+
+Variable Add::Forward(std::vector<Variable *> args) {
+    assert(args.size() == 2);
+    return *(args[0]) + *(args[1]);
+}
+
+std::vector<float> Add::Backward(float &grad) {
+    return {grad * 1, grad * 1};
 }

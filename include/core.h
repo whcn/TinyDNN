@@ -12,13 +12,15 @@ public:
 
     float GetGrad() const;
 
-    void SetGrad(float grad);
+    void UpdateGrad(float grad);
 
     void SetCreator(Function *func);
 
     Function *GetCreator();
 
     void Backward();
+
+    Variable operator+(Variable &variable) const;
 
 private:
     int data_;
@@ -34,9 +36,9 @@ public:
 
     virtual std::vector<float> Backward(float &grad) = 0;
 
-    virtual void SetGrads(std::vector<float> &grads) = 0;
+    void UpdateInputGrads(std::vector<float> &grads);
 
-    virtual std::vector<Variable *> GetInputs() { return inputs_; };
+    std::vector<Variable *> GetInputs();
 
 protected:
     std::vector<Variable *> inputs_;
@@ -47,6 +49,4 @@ public:
     Variable Forward(std::vector<Variable *> args) override;
 
     std::vector<float> Backward(float &grad) override;
-
-    void SetGrads(std::vector<float> &grads) override;
 };
