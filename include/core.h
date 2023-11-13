@@ -8,11 +8,13 @@ class Function;
 
 class Variable {
 public:
-    explicit Variable(int data);
+    explicit Variable(int data, string name = "\"\"");
 
     int GetData() const;
 
     float GetGrad() const;
+
+    string GetName() const;
 
     void UpdateGrad(float grad);
 
@@ -28,6 +30,7 @@ private:
     int data_;
     float grad_;
     Function *creator_;
+    string name_;
 };
 
 class Function {
@@ -42,12 +45,20 @@ public:
 
     vector<Variable *> GetInputs();
 
+    vector<Variable *> GetOutputs();
+
+    const string &GetClassName();
+
 protected:
     vector<Variable *> inputs_;
+    vector<Variable *> outputs_;
+    string name_;
 };
 
 class Add : public Function {
 public:
+    Add() { name_ = "Add"; }
+
     Variable *Forward(vector<Variable *> args) override;
 
     vector<float> Backward(float &grad) override;

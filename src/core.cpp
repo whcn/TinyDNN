@@ -2,7 +2,7 @@
 
 #include "core.h"
 
-Variable::Variable(int data) : data_(data), grad_(0), creator_(nullptr) {}
+Variable::Variable(int data, string name) : data_(data), grad_(0), creator_(nullptr), name_(name) {}
 
 int Variable::GetData() const {
     return data_;
@@ -52,10 +52,15 @@ Variable &Variable::operator+(Variable &variable) const {
     return *output;
 }
 
+string Variable::GetName() const {
+    return name_;
+}
+
 Variable *Function::operator()(vector<Variable *> &args) {
     Variable *output = Forward(args);
-    inputs_ = args;
     output->SetCreator(this);
+    inputs_ = args;
+    outputs_.push_back(output);
     return output;
 }
 
@@ -68,6 +73,14 @@ void Function::UpdateInputGrads(vector<float> &grads) {
 
 vector<Variable *> Function::GetInputs() {
     return inputs_;;
+}
+
+vector<Variable *> Function::GetOutputs() {
+    return outputs_;
+}
+
+const string &Function::GetClassName() {
+    return name_;
 }
 
 Variable *Add::Forward(vector<Variable *> args) {

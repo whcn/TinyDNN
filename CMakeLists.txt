@@ -6,8 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(HEADER_PATH include lib/gtest/include)
 set(LIB_PATH lib/gtest/lib)
 
-set(SRC_FILES main.cpp src/core.cpp)
-set(TEST_FILES test/test_basic_operation.cpp)
+set(SRC_FILES
+        main.cpp
+        src/core.cpp)
+set(TEST_FILES
+        test/test_basic_operation.cpp
+        test/test_graphviz.cpp
+        src/utils.cpp)
 set(LIB_FILES gtest)
 
 include_directories(${HEADER_PATH})
