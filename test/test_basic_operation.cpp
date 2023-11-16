@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "core.h"
+#include "operator.h"
 
 TEST(BasicOperation, Add_Simple) {
     Variable x1(1);
@@ -29,4 +30,20 @@ TEST(BasicOperation, Add_MultiVariable) {
     ASSERT_EQ(x1.GetGrad(), 1);
     ASSERT_EQ(x2.GetGrad(), 1);
     ASSERT_EQ(x3.GetGrad(), 1);
+}
+
+TEST(BasicOperation, Add_RightScalar) {
+    Variable x(1);
+    Variable y = x + 2;
+    ASSERT_EQ(y.GetData(), 3);
+    y.Backward();
+    ASSERT_EQ(x.GetGrad(), 1);
+}
+
+TEST(BasicOperation, Add_LeftScalar) {
+    Variable x(1);
+    Variable y = 2 + x;
+    ASSERT_EQ(y.GetData(), 3);
+    y.Backward();
+    ASSERT_EQ(x.GetGrad(), 1);
 }

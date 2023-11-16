@@ -12,7 +12,8 @@ set(SRC_FILES
 set(TEST_FILES
         test/test_basic_operation.cpp
         test/test_graphviz.cpp
-        src/utils.cpp)
+        src/utils.cpp include/operator.h
+        src/operator.cpp)
 set(LIB_FILES gtest)
 
 include_directories(${HEADER_PATH})
