@@ -8,12 +8,13 @@ set(LIB_PATH lib/gtest/lib)
 
 set(SRC_FILES
         main.cpp
-        src/core.cpp)
-set(TEST_FILES
-        test/test_basic_operation.cpp
-        test/test_graphviz.cpp
-        src/utils.cpp include/operator.h
+        src/core.cpp
+        src/utils.cpp
         src/operator.cpp)
+set(TEST_FILES
+        test/test_add.cpp
+        test/test_graphviz.cpp
+        test/test_mul.cpp)
 set(LIB_FILES gtest)
 
 include_directories(${HEADER_PATH})

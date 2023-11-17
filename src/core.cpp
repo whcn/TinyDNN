@@ -21,13 +21,14 @@ float Variable::GetGrad() const {
 }
 
 void Variable::Backward() {
-    grad_ = 1;
+    GetCreator()->GetOutputs()[0]->grad_ = 1;
     queue<Function *> funcs;
     funcs.push(creator_);
     while (!funcs.empty()) {
         auto creator = funcs.front();
         assert(creator != nullptr);
-        auto grads = creator->Backward(grad_);
+        float grad = creator->GetOutputs()[0]->GetGrad();
+        auto grads = creator->Backward(grad);
         creator->UpdateInputGrads(grads);
         funcs.pop();
         for (auto &input: creator->GetInputs()) {
@@ -49,6 +50,15 @@ Variable &Variable::operator+(Variable &variable) const {
     Variable *rhs = &variable;
     vector<Variable *> args{lhs, rhs};
     Variable *output = (*add)(args);
+    return *output;
+}
+
+Variable &Variable::operator*(Variable &variable) const {
+    Function *mul = new Mul();
+    Variable *lhs = const_cast<Variable *>(this);
+    Variable *rhs = &variable;
+    vector<Variable *> args{lhs, rhs};
+    Variable *output = (*mul)(args);
     return *output;
 }
 
@@ -90,6 +100,17 @@ Variable *Add::Forward(vector<Variable *> args) {
     return output;
 }
 
-vector<float> Add::Backward(float &grad) {
+vector<float> Add::Backward(float grad) {
     return {grad * 1, grad * 1};
+}
+
+Variable *Mul::Forward(vector<Variable *> args) {
+    assert(args.size() == 2);
+    int res = args[0]->GetData() * args[1]->GetData();
+    Variable *output = new Variable(res);
+    return output;
+}
+
+vector<float> Mul::Backward(float grad) {
+    return {(float) inputs_[1]->GetData() * grad, (float) inputs_[0]->GetData() * grad};
 }

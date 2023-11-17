@@ -26,6 +26,8 @@ public:
 
     Variable &operator+(Variable &rhs) const;
 
+    Variable &operator*(Variable &rhs) const;
+
 private:
     int data_;
     float grad_;
@@ -39,7 +41,7 @@ public:
 
     virtual Variable *Forward(vector<Variable *> args) = 0;
 
-    virtual vector<float> Backward(float &grad) = 0;
+    virtual vector<float> Backward(float grad) = 0;
 
     void UpdateInputGrads(vector<float> &grads);
 
@@ -61,5 +63,14 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<float> Backward(float &grad) override;
+    vector<float> Backward(float grad) override;
+};
+
+class Mul : public Function {
+public:
+    Mul() { name_ = "Mul"; }
+
+    Variable *Forward(vector<Variable *> args) override;
+
+    vector<float> Backward(float grad) override;
 };
