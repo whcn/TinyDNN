@@ -15,7 +15,8 @@ set(TEST_FILES
         test/test_add.cpp
         test/test_graphviz.cpp
         test/test_mul.cpp
-        test/test_sub.cpp)
+        test/test_sub.cpp
+        test/test_div.cpp)
 set(LIB_FILES gtest)
 
 include_directories(${HEADER_PATH})

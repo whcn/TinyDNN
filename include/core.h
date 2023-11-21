@@ -30,6 +30,8 @@ public:
 
     Variable &operator-(Variable &rhs) const;
 
+    Variable &operator/(Variable &rhs) const;
+
 private:
     double data_;
     double grad_;
@@ -80,6 +82,15 @@ public:
 class Sub : public Function {
 public:
     Sub() { name_ = "Sub"; }
+
+    Variable *Forward(vector<Variable *> args) override;
+
+    vector<double> Backward(double grad) override;
+};
+
+class Div : public Function {
+public:
+    Div() { name_ = "Div"; }
 
     Variable *Forward(vector<Variable *> args) override;
 

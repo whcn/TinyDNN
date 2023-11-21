@@ -28,3 +28,13 @@ Variable &operator-(double val, Variable &rhs) {
     Variable *lhs = new Variable(val);
     return (*lhs) - rhs;
 }
+
+Variable &operator/(Variable &lhs, double val) {
+    Variable *rhs = new Variable(val);
+    return lhs / (*rhs);
+}
+
+Variable &operator/(double val, Variable &rhs) {
+    Variable *lhs = new Variable(val);
+    return (*lhs) / rhs;
+}
