@@ -62,6 +62,15 @@ Variable &Variable::operator*(Variable &variable) const {
     return *output;
 }
 
+Variable &Variable::operator-(Variable &variable) const {
+    Function *sub = new Sub();
+    Variable *lhs = const_cast<Variable *>(this);
+    Variable *rhs = &variable;
+    vector<Variable *> args{lhs, rhs};
+    Variable *output = (*sub)(args);
+    return *output;
+}
+
 string Variable::GetName() const {
     return name_;
 }
@@ -101,7 +110,7 @@ Variable *Add::Forward(vector<Variable *> args) {
 }
 
 vector<float> Add::Backward(float grad) {
-    return {grad * 1, grad * 1};
+    return {grad, grad};
 }
 
 Variable *Mul::Forward(vector<Variable *> args) {
@@ -113,4 +122,15 @@ Variable *Mul::Forward(vector<Variable *> args) {
 
 vector<float> Mul::Backward(float grad) {
     return {(float) inputs_[1]->GetData() * grad, (float) inputs_[0]->GetData() * grad};
+}
+
+Variable *Sub::Forward(vector<Variable *> args) {
+    assert(args.size() == 2);
+    int res = args[0]->GetData() - args[1]->GetData();
+    Variable *output = new Variable(res);
+    return output;
+}
+
+vector<float> Sub::Backward(float grad) {
+    return {grad, -grad};
 }

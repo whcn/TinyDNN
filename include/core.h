@@ -28,6 +28,8 @@ public:
 
     Variable &operator*(Variable &rhs) const;
 
+    Variable &operator-(Variable &rhs) const;
+
 private:
     int data_;
     float grad_;
@@ -69,6 +71,15 @@ public:
 class Mul : public Function {
 public:
     Mul() { name_ = "Mul"; }
+
+    Variable *Forward(vector<Variable *> args) override;
+
+    vector<float> Backward(float grad) override;
+};
+
+class Sub : public Function {
+public:
+    Sub() { name_ = "Sub"; }
 
     Variable *Forward(vector<Variable *> args) override;
 

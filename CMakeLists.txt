@@ -14,7 +14,8 @@ set(SRC_FILES
 set(TEST_FILES
         test/test_add.cpp
         test/test_graphviz.cpp
-        test/test_mul.cpp)
+        test/test_mul.cpp
+        test/test_sub.cpp)
 set(LIB_FILES gtest)
 
 include_directories(${HEADER_PATH})
