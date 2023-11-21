@@ -2,9 +2,9 @@
 
 #include "core.h"
 
-Variable::Variable(int data, string name) : data_(data), grad_(0), creator_(nullptr), name_(name) {}
+Variable::Variable(double data, string name) : data_(data), grad_(0), creator_(nullptr), name_(name) {}
 
-int Variable::GetData() const {
+double Variable::GetData() const {
     return data_;
 }
 
@@ -16,7 +16,7 @@ Function *Variable::GetCreator() {
     return creator_;
 }
 
-float Variable::GetGrad() const {
+double Variable::GetGrad() const {
     return grad_;
 }
 
@@ -27,7 +27,7 @@ void Variable::Backward() {
     while (!funcs.empty()) {
         auto creator = funcs.front();
         assert(creator != nullptr);
-        float grad = creator->GetOutputs()[0]->GetGrad();
+        double grad = creator->GetOutputs()[0]->GetGrad();
         auto grads = creator->Backward(grad);
         creator->UpdateInputGrads(grads);
         funcs.pop();
@@ -40,7 +40,7 @@ void Variable::Backward() {
     }
 }
 
-void Variable::UpdateGrad(float grad) {
+void Variable::UpdateGrad(double grad) {
     grad_ += grad;
 }
 
@@ -83,7 +83,7 @@ Variable *Function::operator()(vector<Variable *> &args) {
     return output;
 }
 
-void Function::UpdateInputGrads(vector<float> &grads) {
+void Function::UpdateInputGrads(vector<double> &grads) {
     assert(grads.size() == inputs_.size());
     for (int i = 0; i < grads.size(); ++i) {
         inputs_[i]->UpdateGrad(grads[i]);
@@ -109,7 +109,7 @@ Variable *Add::Forward(vector<Variable *> args) {
     return output;
 }
 
-vector<float> Add::Backward(float grad) {
+vector<double> Add::Backward(double grad) {
     return {grad, grad};
 }
 
@@ -120,8 +120,8 @@ Variable *Mul::Forward(vector<Variable *> args) {
     return output;
 }
 
-vector<float> Mul::Backward(float grad) {
-    return {(float) inputs_[1]->GetData() * grad, (float) inputs_[0]->GetData() * grad};
+vector<double> Mul::Backward(double grad) {
+    return {inputs_[1]->GetData() * grad, inputs_[0]->GetData() * grad};
 }
 
 Variable *Sub::Forward(vector<Variable *> args) {
@@ -131,6 +131,6 @@ Variable *Sub::Forward(vector<Variable *> args) {
     return output;
 }
 
-vector<float> Sub::Backward(float grad) {
+vector<double> Sub::Backward(double grad) {
     return {grad, -grad};
 }

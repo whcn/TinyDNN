@@ -8,15 +8,15 @@ class Function;
 
 class Variable {
 public:
-    explicit Variable(int data, string name = "\"\"");
+    explicit Variable(double data, string name = "\"\"");
 
-    int GetData() const;
+    double GetData() const;
 
-    float GetGrad() const;
+    double GetGrad() const;
 
     string GetName() const;
 
-    void UpdateGrad(float grad);
+    void UpdateGrad(double grad);
 
     void SetCreator(Function *func);
 
@@ -31,8 +31,8 @@ public:
     Variable &operator-(Variable &rhs) const;
 
 private:
-    int data_;
-    float grad_;
+    double data_;
+    double grad_;
     Function *creator_;
     string name_;
 };
@@ -43,9 +43,9 @@ public:
 
     virtual Variable *Forward(vector<Variable *> args) = 0;
 
-    virtual vector<float> Backward(float grad) = 0;
+    virtual vector<double> Backward(double grad) = 0;
 
-    void UpdateInputGrads(vector<float> &grads);
+    void UpdateInputGrads(vector<double> &grads);
 
     vector<Variable *> GetInputs();
 
@@ -65,7 +65,7 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<float> Backward(float grad) override;
+    vector<double> Backward(double grad) override;
 };
 
 class Mul : public Function {
@@ -74,7 +74,7 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<float> Backward(float grad) override;
+    vector<double> Backward(double grad) override;
 };
 
 class Sub : public Function {
@@ -83,5 +83,5 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<float> Backward(float grad) override;
+    vector<double> Backward(double grad) override;
 };

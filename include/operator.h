@@ -2,14 +2,14 @@
 
 #include "core.h"
 
-Variable &operator+(Variable &lhs, int val);
+Variable &operator+(Variable &lhs, double val);
 
-Variable &operator+(int val, Variable &rhs);
+Variable &operator+(double val, Variable &rhs);
 
-Variable &operator*(Variable &lhs, int val);
+Variable &operator*(Variable &lhs, double val);
 
-Variable &operator*(int val, Variable &rhs);
+Variable &operator*(double val, Variable &rhs);
 
-Variable &operator-(Variable &lhs, int val);
+Variable &operator-(Variable &lhs, double val);
 
-Variable &operator-(int val, Variable &rhs);
+Variable &operator-(double val, Variable &rhs);
