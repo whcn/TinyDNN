@@ -44,11 +44,35 @@ TEST(Graphviz, AddBackward) {
     system("dot -T pdf add_backward.dot -o add_backward.pdf");
 }
 
-//TEST(Graphviz, SquareBackward) {
-//    Variable x(2, "x");
-//    Variable y = x * x;
-//    y.Backward();
-//    Variable &gx = x.GetGrad();
-//    CreateDotFile(gx, "square_backward.dot");
-//    system("dot -T pdf square_backward.dot -o square_backward.pdf");
-//}
+TEST(Graphviz, MulBackward) {
+    Variable x1(1, "x1");
+    Variable x2(2, "x2");
+    Variable y = x1 * x2;
+    y.Backward();
+    Variable *gx1 = x1.GetGrad();
+    gx1->SetName("gx1");
+    CreateDotFile(*gx1, "mul_backward.dot");
+    system("dot -T pdf mul_backward.dot -o mul_backward.pdf");
+}
+
+TEST(Graphviz, SubBackward) {
+    Variable x1(1, "x1");
+    Variable x2(2, "x2");
+    Variable y = x1 - x2;
+    y.Backward();
+    Variable *gx1 = x1.GetGrad();
+    gx1->SetName("gx1");
+    CreateDotFile(*gx1, "sub_backward.dot");
+    system("dot -T pdf sub_backward.dot -o sub_backward.pdf");
+}
+
+TEST(Graphviz, DivBackward) {
+    Variable x1(1, "x1");
+    Variable x2(2, "x2");
+    Variable y = x1 / x2;
+    y.Backward();
+    Variable *gx1 = x1.GetGrad();
+    gx1->SetName("gx1");
+    CreateDotFile(*gx1, "div_backward.dot");
+    system("dot -T pdf div_backward.dot -o div_backward.pdf");
+}

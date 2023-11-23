@@ -22,8 +22,6 @@ public:
 
     void SetName(const string &name);
 
-//    void UpdateGrad(double grad);
-
     void SetCreator(Function *func);
 
     Function *GetCreator();
@@ -52,8 +50,6 @@ public:
     virtual Variable *Forward(vector<Variable *> args) = 0;
 
     virtual vector<Variable *> Backward(Variable *grad) = 0;
-
-//    void UpdateInputGrads(vector<double> &grads);
 
     vector<Variable *> GetInputs();
 

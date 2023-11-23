@@ -47,30 +47,16 @@ void Variable::Backward() {
         for (int i = 0; i < inputs.size(); ++i) {
             Variable *input_grad = inputs[i]->GetGrad();
             Variable *backward_grad = grads[i];
-            input_grad = &(*(input_grad) + *(backward_grad));
-            inputs[i]->SetGrad(input_grad);
+            Variable &updated_grad = *input_grad + *backward_grad;
+            inputs[i]->SetGrad(&updated_grad);
             auto input_creator = inputs[i]->GetCreator();
             if (input_creator != nullptr) {
                 funcs.push(input_creator);
             }
         }
         funcs.pop();
-
-
-//        creator->UpdateInputGrads(grads);
-//        funcs.pop();
-//        for (auto &input: creator->GetInputs()) {
-//            auto input_creator = input->GetCreator();
-//            if (input_creator != nullptr) {
-//                funcs.push(input_creator);
-//            }
-//        }
     }
 }
-
-//void Variable::UpdateGrad(double grad) {
-//    grad_ += grad;
-//}
 
 Variable &Variable::operator+(Variable &variable) const {
     Function *add = new Add();
@@ -124,13 +110,6 @@ Variable *Function::operator()(vector<Variable *> &args) {
     return output;
 }
 
-//void Function::UpdateInputGrads(vector<double> &grads) {
-//    assert(grads.size() == inputs_.size());
-//    for (int i = 0; i < grads.size(); ++i) {
-//        inputs_[i]->UpdateGrad(grads[i]);
-//    }
-//}
-
 vector<Variable *> Function::GetInputs() {
     return inputs_;;
 }
@@ -164,12 +143,11 @@ Variable *Mul::Forward(vector<Variable *> args) {
 }
 
 vector<Variable *> Mul::Backward(Variable *grad) {
-//    Variable *x0 = inputs_[0];
-//    Variable *x1 = inputs_[1];
-//    Variable &gx0 = (*x0) * (*grad);
-//    Variable &gx1 = (*x1) * (*grad);
-//    return {&gx0, &gx1};
-    return {grad, grad};
+    Variable *x0 = inputs_[0];
+    Variable *x1 = inputs_[1];
+    Variable &gx0 = (*x1) * (*grad);
+    Variable &gx1 = (*x0) * (*grad);
+    return {&gx0, &gx1};
 }
 
 Variable *Sub::Forward(vector<Variable *> args) {
@@ -180,8 +158,9 @@ Variable *Sub::Forward(vector<Variable *> args) {
 }
 
 vector<Variable *> Sub::Backward(Variable *grad) {
-    return {grad, grad};
-//    return {grad, -grad};
+    Variable &gx0 = 1 * (*grad);
+    Variable &gx1 = -1 * (*grad);
+    return {&gx0, &gx1};
 }
 
 Variable *Div::Forward(vector<Variable *> args) {
@@ -192,8 +171,9 @@ Variable *Div::Forward(vector<Variable *> args) {
 }
 
 vector<Variable *> Div::Backward(Variable *grad) {
-//    double x1 = inputs_[0]->GetData();
-//    double x2 = inputs_[1]->GetData();
-//    return {1.0 / x2 * grad, -x1 / (x2 * x2) * grad};
-    return {grad, grad};
+    Variable *x0 = inputs_[0];
+    Variable *x1 = inputs_[1];
+    Variable &gx0 = 1.0 / (*x1) * (*grad);
+    Variable &gx1 = -1 * (*x0) / ((*x1) * (*x1)) * (*grad);
+    return {&gx0, &gx1};
 }
