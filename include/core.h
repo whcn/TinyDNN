@@ -12,11 +12,17 @@ public:
 
     double GetData() const;
 
-    double GetGrad() const;
+    void SetData(double data);
+
+    Variable *GetGrad();
+
+    void SetGrad(Variable *grad);
 
     string GetName() const;
 
-    void UpdateGrad(double grad);
+    void SetName(const string &name);
+
+//    void UpdateGrad(double grad);
 
     void SetCreator(Function *func);
 
@@ -34,7 +40,7 @@ public:
 
 private:
     double data_;
-    double grad_;
+    Variable *grad_;
     Function *creator_;
     string name_;
 };
@@ -45,9 +51,9 @@ public:
 
     virtual Variable *Forward(vector<Variable *> args) = 0;
 
-    virtual vector<double> Backward(double grad) = 0;
+    virtual vector<Variable *> Backward(Variable *grad) = 0;
 
-    void UpdateInputGrads(vector<double> &grads);
+//    void UpdateInputGrads(vector<double> &grads);
 
     vector<Variable *> GetInputs();
 
@@ -67,7 +73,7 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<double> Backward(double grad) override;
+    vector<Variable *> Backward(Variable *grad) override;
 };
 
 class Mul : public Function {
@@ -76,7 +82,7 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<double> Backward(double grad) override;
+    vector<Variable *> Backward(Variable *grad) override;
 };
 
 class Sub : public Function {
@@ -85,7 +91,7 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<double> Backward(double grad) override;
+    vector<Variable *> Backward(Variable *grad) override;
 };
 
 class Div : public Function {
@@ -94,5 +100,5 @@ public:
 
     Variable *Forward(vector<Variable *> args) override;
 
-    vector<double> Backward(double grad) override;
+    vector<Variable *> Backward(Variable *grad) override;
 };

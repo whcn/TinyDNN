@@ -2,6 +2,7 @@
 
 
 Variable &operator+(Variable &lhs, double val) {
+    val = std::round(val * 10.0) / 10.0;
     Variable *rhs = new Variable(val);
     return lhs + (*rhs);
 }

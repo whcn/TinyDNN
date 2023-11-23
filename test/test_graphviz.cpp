@@ -32,3 +32,23 @@ TEST(Graphviz, GoldsteinPrice) {
     CreateDotFile(y, "goldstein_price.dot");
     system("dot -T pdf goldstein_price.dot -o goldstein_price.pdf");
 }
+
+TEST(Graphviz, AddBackward) {
+    Variable x1(1, "x1");
+    Variable x2(2, "x2");
+    Variable y = x1 + x2;
+    y.Backward();
+    Variable *gx1 = x1.GetGrad();
+    gx1->SetName("gx1");
+    CreateDotFile(*gx1, "add_backward.dot");
+    system("dot -T pdf add_backward.dot -o add_backward.pdf");
+}
+
+//TEST(Graphviz, SquareBackward) {
+//    Variable x(2, "x");
+//    Variable y = x * x;
+//    y.Backward();
+//    Variable &gx = x.GetGrad();
+//    CreateDotFile(gx, "square_backward.dot");
+//    system("dot -T pdf square_backward.dot -o square_backward.pdf");
+//}
